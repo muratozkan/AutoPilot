@@ -5,7 +5,6 @@ namespace AutoPilot
 {
 	public class APFlightControl 
 	{
-
 		public float TargetAltitude { get; set; }
 
 		public float BestAngle { get; private set; }
@@ -30,6 +29,8 @@ namespace AutoPilot
 		public void OnFlyByWire(FlightCtrlState state) 
 		{
 			Vessel vessel = FlightGlobals.ActiveVessel;
+
+
 
 			float altitudeDiff = (float) (TargetAltitude - vessel.altitude);
 

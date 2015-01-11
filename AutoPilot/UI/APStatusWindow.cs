@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace AutoPilot
+namespace AutoPilot.UI
 {
 	public class APStatusWindow : WindowBase
 	{

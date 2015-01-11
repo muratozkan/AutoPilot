@@ -46,9 +46,18 @@
     <Compile Include="AutoPilotMod.cs" />
     <Compile Include="DebugSupport.cs" />
     <Compile Include="APFlightControl.cs" />
-    <Compile Include="APStatusWindow.cs" />
     <Compile Include="APUtils.cs" />
-    <Compile Include="WindowBase.cs" />
+    <Compile Include="Control\APFlightData.cs" />
+    <Compile Include="Control\APControl.cs" />
+    <Compile Include="Control\APControlData.cs" />
+    <Compile Include="Control\APTarget.cs" />
+    <Compile Include="Control\APControlParams.cs" />
+    <Compile Include="UI\WindowBase.cs" />
+    <Compile Include="UI\APStatusWindow.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="Control\" />
+    <Folder Include="UI\" />
+  </ItemGroup>
 </Project>
