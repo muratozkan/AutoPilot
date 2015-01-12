@@ -1,11 +1,12 @@
 ﻿using System;
 using UnityEngine;
+using AutoPilot.Control;
 
 namespace AutoPilot.UI
 {
 	public class APStatusWindow : WindowBase
 	{
-		private APFlightControl flightControl;
+		private APControl flightControl;
 
 		public GUIStyle NameStyle { get; set; }
 
@@ -13,7 +14,7 @@ namespace AutoPilot.UI
 
 		private const float FixedWidth = 300f;
 
-		public APStatusWindow (APFlightControl flightControl) : base("AP Status")
+		public APStatusWindow (APControl flightControl) : base("AP Status")
 		{
 			// Force default size
 			this.flightControl = flightControl;
@@ -27,11 +28,10 @@ namespace AutoPilot.UI
 		{
 			GUILayout.BeginVertical();
 
-			DrawNameValueLine ("Target Altitude", flightControl.TargetAltitude.ToString ());
-			DrawNameValueLine ("Pitch (Target)", flightControl.TargetPitch.ToString ());
-			DrawNameValueLine ("Velocity (Horizontal)", flightControl.VHorizontal.ToString ());
-			DrawNameValueLine ("Velocity (Vertical)", flightControl.VVertical.ToString ());
-			DrawNameValueLine ("Best Angle", flightControl.BestAngle.ToString ());
+			DrawNameValueLine ("Target Altitude", flightControl.Target.altitude.ToString ());
+			DrawNameValueLine ("Pitch (Target)", flightControl.Command.pitch.ToString ());
+			DrawNameValueLine ("Velocity (Horizontal)", flightControl.FlightData.vHorizontal.ToString ());
+			DrawNameValueLine ("Velocity (Vertical)", flightControl.FlightData.vVertical.ToString ());
 
 			GUILayout.EndVertical();
 		}

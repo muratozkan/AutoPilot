@@ -1,13 +1,14 @@
 ﻿using System;
 using UnityEngine;
 using AutoPilot.UI;
+using AutoPilot.Control;
 
 namespace AutoPilot
 {
 	[KSPAddon(KSPAddon.Startup.Flight, false)]
 	public class AutoPilotMod : MonoBehaviour
 	{
-		private APFlightControl flightControl = null;
+		private APSimpleControl flightControl = new APSimpleControl ();
 
 		/*
          * Called after the scene is loaded. Load resources here.
@@ -24,9 +25,8 @@ namespace AutoPilot
 			Vessel currentVessel = FlightGlobals.ActiveVessel;
 			Debug.Log("AutoPilot: Attaching controller...");
 
-			flightControl = new APFlightControl ();
-			FlightGlobals.ActiveVessel.OnFlyByWire += flightControl.OnFlyByWire;
-			GameEvents.onVesselGoOffRails.Add(flightControl.OnFlightReady);
+			FlightGlobals.ActiveVessel.OnFlyByWire += OnFlyByWire;
+			GameEvents.onVesselGoOffRails.Add(OnFlightReady);
 
 			APStatusWindow statusWindow = new APStatusWindow (flightControl);
 			statusWindow.SetVisible (true);
@@ -58,10 +58,33 @@ namespace AutoPilot
 			Debug.Log("AutoPilot Plugin [" + this.GetInstanceID().ToString("X") + "][" + Time.time.ToString("0.0000") + "]: OnDestroy");
 		}
 
-		private bool canAttachToVessel(Vessel currentVessel) {
-			return currentVessel.isActiveVessel && currentVessel.IsControllable && currentVessel.situation != Vessel.Situations.SPLASHED;
+		private void OnFlightReady(Vessel vessel)
+		{
+			Debug.Log ("AutoPilot: OnFlightReady");
+		}
+
+		private void OnFlyByWire(FlightCtrlState state) 
+		{
+			Vessel vessel = FlightGlobals.ActiveVessel;
+
+			APFlightData data = new APFlightData {
+				vHorizontal = (float) vessel.horizontalSrfSpeed,
+				vVertical = (float) vessel.verticalSpeed,
+				velocity = vessel.GetSrfVelocity (),
+				rotation = vessel.srfRelRotation
+			};
+
+			APTarget target = new APTarget {
+				altitude = 1000f
+			};
+
+			flightControl.FlightData = data;
+			flightControl.Target = target;
+
+			flightControl.Update ((float) HighLogic.CurrentGame.UniversalTime);
+
+			state.pitch += flightControl.Command.pitch;
 		}
 	}
-
 }
 	

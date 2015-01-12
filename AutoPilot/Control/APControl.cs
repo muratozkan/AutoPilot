@@ -1,11 +1,21 @@
 ﻿using System;
 
-namespace AutoPilot
+namespace AutoPilot.Control
 {
 	public abstract class APControl
 	{
-		public APControlData ControlData { get; set; }
+		public APParams Params { get; set; }
 
-		public abstract APControl Update(APFlightData data, APTarget target);
+		public APFlightData FlightData { get; set; }
+
+		public APTarget Target { get; set; }
+
+		public APCommand Command { get; protected set; }
+
+		/// <summary>
+		/// Calculates the command to be applied to the actuators using the target and flight data and sets the result in "Command" field.
+		/// </summary>
+		/// <param name="time">Time.</param>
+		public abstract void Update(float time);
 	}
 }
