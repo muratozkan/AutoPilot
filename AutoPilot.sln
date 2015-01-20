@@ -3,6 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoPilot", "AutoPilot\AutoPilot.csproj", "{FA9A0819-D24F-4A3E-88B5-7BF236D94E1A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{73B29BE2-7342-4897-BD3C-1603E83849BB}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE = LICENSE
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +18,8 @@ Global
 		{FA9A0819-D24F-4A3E-88B5-7BF236D94E1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA9A0819-D24F-4A3E-88B5-7BF236D94E1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA9A0819-D24F-4A3E-88B5-7BF236D94E1A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = AutoPilot\AutoPilot.csproj
