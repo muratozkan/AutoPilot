@@ -7,26 +7,21 @@ namespace AutoPilot.Control
 	{
 		#region implemented abstract members of APControl
 
-		public override void Update (float time)
+		protected override APCommand Update ()
 		{
-			float altitudeDiff = (float) (Target.altitude - FlightData.altitude);
+			float deltaX = (float) (Target.altitude - FlightData.altitude);
 
-			float tToAlt = APUtils.AlmostEqual(FlightData.vVertical, 0f, 1E-03f) ? float.MaxValue : Mathf.Abs(altitudeDiff) / Mathf.Abs(FlightData.vVertical);
+			float tanAlpha = deltaX / (FlightData.vHorizontal * 8);
+			float target = Mathf.Atan (tanAlpha) * 2 / Mathf.PI;
 
-			float pitch = (tToAlt > 5) ? 0.3f : tToAlt * (1f / 5) * 0.1f; 
+			int signAdjust = (deltaX > 0f && (FlightData.vVertical * 16) > deltaX) ? -1 : 1;
 
-			if (altitudeDiff < 0)
-				pitch = -pitch;
+			Debug.Log(string.Format ("AutoPilot: deltaX: {0} target * sa: {1}", deltaX, target * signAdjust)); 
 
-			int isPos = Command.pitch > 0 ? 1 : -1;
-			if (Math.Abs (FlightData.rotation.Pitch ()) >= Math.Abs (Command.pitch))
-				pitch = -pitch;
-			 
-			Command = new APCommand {
-				pitch = pitch
+			return new APCommand {
+				pitch = Mathf.MoveTowards (FlightData.rotation.Pitch (), target * signAdjust, 0.1f)
 			};
 		}
-
 		#endregion
 	}
 }

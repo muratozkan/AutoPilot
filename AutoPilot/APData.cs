@@ -8,7 +8,9 @@ namespace AutoPilot
 	/// </summary>
 	public struct APParams 
 	{
-
+		public float kP;
+		public float kI;
+		public float kD;
 	}
 
 	/// <summary>

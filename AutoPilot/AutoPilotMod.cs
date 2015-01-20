@@ -8,7 +8,7 @@ namespace AutoPilot
 	[KSPAddon(KSPAddon.Startup.Flight, false)]
 	public class AutoPilotMod : MonoBehaviour
 	{
-		private APSimpleControl flightControl = new APSimpleControl ();
+		private APControl flightControl = new APAltitudeControl ();
 
 		/*
          * Called after the scene is loaded. Load resources here.
@@ -27,6 +27,13 @@ namespace AutoPilot
 
 			FlightGlobals.ActiveVessel.OnFlyByWire += OnFlyByWire;
 			GameEvents.onVesselGoOffRails.Add(OnFlightReady);
+
+			APParams param = new APParams () {
+				kD = 0.0001f,
+				kI = 0.1f,
+				kP = 0.05f
+			};
+			flightControl.Params = param;
 
 			APStatusWindow statusWindow = new APStatusWindow (flightControl);
 			statusWindow.SetVisible (true);
@@ -71,19 +78,19 @@ namespace AutoPilot
 				vHorizontal = (float) vessel.horizontalSrfSpeed,
 				vVertical = (float) vessel.verticalSpeed,
 				velocity = vessel.GetSrfVelocity (),
-				rotation = vessel.srfRelRotation
+				rotation = vessel.srfRelRotation,
+				altitude = (float) vessel.altitude
 			};
 
 			APTarget target = new APTarget {
 				altitude = 1000f
 			};
 
-			flightControl.FlightData = data;
 			flightControl.Target = target;
 
-			flightControl.Update ((float) HighLogic.CurrentGame.UniversalTime);
+			flightControl.Update (data);
 
-			state.pitch += flightControl.Command.pitch;
+			state.pitch = flightControl.Command.pitch;
 		}
 	}
 }
