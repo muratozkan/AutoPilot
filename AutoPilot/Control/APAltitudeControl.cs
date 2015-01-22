@@ -6,29 +6,29 @@ namespace AutoPilot
 {
 	public class APAltitudeControl : APControl
 	{
-		private float error;
-		private float prevError;
+		public const double deltaVMax = 20;
 
-		private float integral = 0.0f;
-		private float derivative = 0.0f;
+		// kP = 1 / 2 * deltaVMax
+		private APPid pid = new APPid (0.025, 0.0001, 0.00001);
 
 		#region implemented abstract members of APControl
 
-		protected override APCommand Update ()
+		protected override APCommand Compute ()
 		{
-			error = Target.altitude - FlightData.altitude;
+			double dAlt = Target.altitude - FlightData.altitude;
+			double vTarget = dAlt / 5;		// assume steady state in 5 seconds
 
-			integral = integral + (error * Time.deltaTime);
-			derivative = (error - prevError) / Time.deltaTime;
+			vTarget = Math.Min (deltaVMax, Math.Max (vTarget, -deltaVMax));
 
-			float pitch = (Params.kP * error) + (Params.kI * integral) + (Params.kD * derivative);
+			// double vNormDenom = Math.Abs (FlightData.vVertical) < 1 ? 1 : Math.Abs (FlightData.vVertical);
 
-			prevError = error;
+			double error = (vTarget - FlightData.vVertical); // / vNormDenom;
+			double pitch = pid.Compute (error, TimeWarp.deltaTime);
 
-			Debug.Log(string.Format ("AutoPilot: pitch: {0} error: {1}", pitch, error)); 
+			Debug.Log(string.Format ("AutoPilot: vTarget: {0} pitch: {1} error: {2}", vTarget, pitch, error)); 
 
 			return new APCommand () {
-				pitch = Mathf.Clamp (pitch, 1f, -1f)
+				pitch = (float) pitch
 			};
 		}
 

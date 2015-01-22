@@ -7,7 +7,7 @@ namespace AutoPilot.Control
 	{
 		#region implemented abstract members of APControl
 
-		protected override APCommand Update ()
+		protected override APCommand Compute ()
 		{
 			float deltaX = (float) (Target.altitude - FlightData.altitude);
 

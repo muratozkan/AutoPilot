@@ -52,6 +52,7 @@
     <Compile Include="Control\APSimpleControl.cs" />
     <Compile Include="APData.cs" />
     <Compile Include="Control\APAltitudeControl.cs" />
+    <Compile Include="Control\APPid.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

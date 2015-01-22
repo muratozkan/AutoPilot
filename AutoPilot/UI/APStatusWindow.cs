@@ -29,6 +29,8 @@ namespace AutoPilot.UI
 			GUILayout.BeginVertical();
 
 			DrawNameValueLine ("Target Altitude", flightControl.Target.altitude.ToString ());
+			DrawNameValueLine ("Current Altitude", flightControl.FlightData.altitude.ToString ());
+
 			DrawNameValueLine ("Pitch (Target)", flightControl.Command.pitch.ToString ());
 			DrawNameValueLine ("Velocity (Horizontal)", flightControl.FlightData.vHorizontal.ToString ());
 			DrawNameValueLine ("Velocity (Vertical)", flightControl.FlightData.vVertical.ToString ());
