@@ -11,7 +11,11 @@ namespace AutoPilot.UI
 		protected Rect windowPos;
 		private bool visible;
 
-		protected GUIStyle closeButtonStyle;
+		private bool stylesLoaded = false;
+		protected GUIStyle closeButtonStyle, 
+			nameStyle, 
+			valueStyle,
+			textFieldStyle;
 
 		protected WindowBase(string windowTitle)
 		{
@@ -22,6 +26,7 @@ namespace AutoPilot.UI
 			visible = false;
 		}
 
+		#region Visibility
 		public bool IsVisible()
 		{
 			return visible;
@@ -52,62 +57,75 @@ namespace AutoPilot.UI
 			SetVisible(!visible);
 		}
 
+		#endregion
+
 		public void SetSize(int width, int height)
 		{
 			windowPos.width = width;
 			windowPos.height = height;
 		}
-
-		public virtual void Load(ConfigNode config)
-		{
-			// Not implemented
-		}
-
-		public virtual void Save(ConfigNode config)
-		{
-			// Not implemented
-		}
 			
 		protected virtual void DrawWindow()
 		{
-			if (visible)
+			if (visible && ! APUtils.IsPaused ())
 			{
-				bool paused = false;
-				if (HighLogic.LoadedSceneIsFlight)
-				{
-					try
-					{
-						paused = PauseMenu.isOpen || FlightResultsDialog.isDisplaying;
-					}
-					catch (Exception)
-					{
-						// ignore the error and assume the pause menu is not open
-					}
-				}
+				GUI.skin = HighLogic.Skin;
+				ConfigureStyles();
 
-				if (!paused)
-				{
-					GUI.skin = HighLogic.Skin;
-					ConfigureStyles();
-
-					windowPos = APUtils.EnsureVisible(windowPos);
-					windowPos = GUILayout.Window(windowId, windowPos, PreDrawWindowContents, windowTitle, GUILayout.ExpandWidth(false),
-						GUILayout.ExpandHeight(true), GUILayout.MinWidth(64), GUILayout.MinHeight(64));
-				}
+				windowPos = APUtils.EnsureVisible(windowPos);
+				windowPos = GUILayout.Window(windowId, windowPos, PreDrawWindowContents, windowTitle, GUILayout.ExpandWidth(false),
+					GUILayout.ExpandHeight(true), GUILayout.MinWidth(64), GUILayout.MinHeight(64));
 			}
 		}
 
-		protected virtual void ConfigureStyles()
+		private void ConfigureStyles()
 		{
-			if (closeButtonStyle == null)
-			{
-				closeButtonStyle = new GUIStyle(GUI.skin.button);
-				closeButtonStyle.padding = new RectOffset(5, 5, 3, 0);
-				closeButtonStyle.margin = new RectOffset(1, 1, 1, 1);
-				closeButtonStyle.stretchWidth = false;
-				closeButtonStyle.stretchHeight = false;
-				closeButtonStyle.alignment = TextAnchor.MiddleCenter;
-			}
+			if (stylesLoaded)
+				return;
+
+			closeButtonStyle = new GUIStyle (HighLogic.Skin.button) {
+				margin = new RectOffset (1, 1, 1, 1),
+				padding = new RectOffset (5, 5, 3, 0),
+				alignment = TextAnchor.MiddleCenter,
+				stretchWidth = false,
+				stretchHeight = false
+			};
+
+			nameStyle = new GUIStyle (HighLogic.Skin.label) {
+				normal = {
+					textColor = Color.white
+				},
+				margin = new RectOffset (),
+				padding = new RectOffset (5, 0, 0, 0),
+				alignment = TextAnchor.MiddleLeft,
+				fontSize = (int)(11),
+				fontStyle = FontStyle.Bold,
+				fixedHeight = 20.0f
+			};
+
+			valueStyle = new GUIStyle (HighLogic.Skin.label) {
+				margin = new RectOffset (),
+				padding = new RectOffset (0, 5, 0, 0),
+				alignment = TextAnchor.MiddleRight,
+				fontSize = (int)(11),
+				fontStyle = FontStyle.Normal,
+				fixedHeight = 20.0f 
+			};
+
+			textFieldStyle = new GUIStyle (HighLogic.Skin.textField) {
+				normal = {
+					textColor = Color.white
+				},
+				margin = new RectOffset (),
+				padding = new RectOffset (5, 0, 0, 0),
+				alignment = TextAnchor.MiddleLeft,
+				fontSize = (int)(11),
+				fontStyle = FontStyle.Bold,
+				fixedHeight = 20.0f
+
+			};
+
+			stylesLoaded = true;
 		}
 
 		private void PreDrawWindowContents(int windowId)
@@ -121,6 +139,34 @@ namespace AutoPilot.UI
 
 			GUI.DragWindow();
 		}
+
+		#region Draw Methods
+
+		protected void DrawNameValueLine(string label, string value, float width = 300f) 
+		{
+			GUILayout.BeginHorizontal(GUILayout.Width(width));
+
+			GUILayout.Label (label, nameStyle);
+			GUILayout.FlexibleSpace ();
+			GUILayout.TextArea (value, valueStyle);
+
+			GUILayout.EndHorizontal (); 
+		}
+
+		protected void DrawNameTextBox(string leftLabel, string defValue, Action<String> onUpdate, float width = 300f) 
+		{
+			GUILayout.BeginHorizontal(GUILayout.Width(width));
+
+			GUILayout.Label(leftLabel, nameStyle);
+			GUILayout.FlexibleSpace ();
+			string result = GUILayout.TextField(defValue, textFieldStyle);
+
+			GUILayout.EndHorizontal();
+
+			onUpdate (result);
+		}
+
+		#endregion
 
 		protected abstract void DrawWindowContents(int windowId);
 	}

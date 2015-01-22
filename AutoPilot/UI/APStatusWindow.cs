@@ -8,10 +8,6 @@ namespace AutoPilot.UI
 	{
 		private APControl flightControl;
 
-		public GUIStyle NameStyle { get; set; }
-
-		public GUIStyle ValueStyle { get; set; }
-
 		private const float FixedWidth = 300f;
 
 		public APStatusWindow (APControl flightControl) : base("AP Status")
@@ -20,8 +16,6 @@ namespace AutoPilot.UI
 			this.flightControl = flightControl;
 
 			windowPos = new Rect(60, 60, 230, 100);
-
-			InitialiseStyles ();
 		}
 
 		protected override void DrawWindowContents(int windowId)
@@ -30,47 +24,14 @@ namespace AutoPilot.UI
 
 			DrawNameValueLine ("Target Altitude", flightControl.Target.altitude.ToString ());
 			DrawNameValueLine ("Current Altitude", flightControl.FlightData.altitude.ToString ());
-
+			DrawNameValueLine ("", "");
 			DrawNameValueLine ("Pitch (Target)", flightControl.Command.pitch.ToString ());
 			DrawNameValueLine ("Velocity (Horizontal)", flightControl.FlightData.vHorizontal.ToString ());
 			DrawNameValueLine ("Velocity (Vertical)", flightControl.FlightData.vVertical.ToString ());
+			DrawNameValueLine ("", "");
+			DrawNameTextBox ("Altitude", "1000", (string t) => { Debug.Log (t); });
 
 			GUILayout.EndVertical();
-		}
-
-		private void DrawNameValueLine(String label, String value) 
-		{
-			GUILayout.BeginHorizontal(GUILayout.Width(FixedWidth));
-
-			GUILayout.Label (label, NameStyle);
-			GUILayout.FlexibleSpace ();
-			GUILayout.TextArea (value, ValueStyle);
-
-			GUILayout.EndHorizontal (); 
-		}
-
-		private void InitialiseStyles()
-		{
-			this.NameStyle = new GUIStyle (HighLogic.Skin.label) {
-				normal = {
-					textColor = Color.white
-				},
-				margin = new RectOffset (),
-				padding = new RectOffset (5, 0, 0, 0),
-				alignment = TextAnchor.MiddleLeft,
-				fontSize = (int)(11),
-				fontStyle = FontStyle.Bold,
-				fixedHeight = 20.0f
-			};
-
-			this.ValueStyle = new GUIStyle (HighLogic.Skin.label) {
-				margin = new RectOffset (),
-				padding = new RectOffset (0, 5, 0, 0),
-				alignment = TextAnchor.MiddleRight,
-				fontSize = (int)(11),
-				fontStyle = FontStyle.Normal,
-				fixedHeight = 20.0f 
-			};
 		}
 	}
 }
