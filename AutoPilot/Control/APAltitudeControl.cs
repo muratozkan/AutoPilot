@@ -9,7 +9,7 @@ namespace AutoPilot
 		public const double deltaVMax = 20;
 
 		// kP = 1 / 2 * deltaVMax
-		private APPid pid = new APPid (0.025, 0.0001, 0.00001);
+		private APPid pid = new APPid (0.025, 0.0001, 0.001);
 
 		#region implemented abstract members of APControl
 

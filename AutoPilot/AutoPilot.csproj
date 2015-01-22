@@ -49,7 +49,6 @@
     <Compile Include="Control\APControl.cs" />
     <Compile Include="UI\WindowBase.cs" />
     <Compile Include="UI\APStatusWindow.cs" />
-    <Compile Include="Control\APSimpleControl.cs" />
     <Compile Include="APData.cs" />
     <Compile Include="Control\APAltitudeControl.cs" />
     <Compile Include="Control\APPid.cs" />
