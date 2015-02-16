@@ -82,12 +82,6 @@ namespace AutoPilot
 				altitude = (float) vessel.altitude
 			};
 
-			APTarget target = new APTarget {
-				altitude = 1000f
-			};
-
-			flightControl.Target = target;
-
 			flightControl.Update (data);
 
 			state.pitch = flightControl.Command.pitch;

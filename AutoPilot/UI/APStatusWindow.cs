@@ -29,7 +29,14 @@ namespace AutoPilot.UI
 			DrawNameValueLine ("Velocity (Horizontal)", flightControl.FlightData.vHorizontal.ToString ());
 			DrawNameValueLine ("Velocity (Vertical)", flightControl.FlightData.vVertical.ToString ());
 			DrawNameValueLine ("", "");
-			DrawNameTextBox ("Altitude", "1000", (string t) => { Debug.Log (t); });
+			DrawNameTextBox ("Altitude", flightControl.Target.altitude.ToString (), (string t) => { 
+				float value = 0;
+				if (float.TryParse (t, out value)) {
+					APTarget target = new APTarget();
+					target.altitude = value;
+					flightControl.Target  = target;
+				}
+			});
 
 			GUILayout.EndVertical();
 		}

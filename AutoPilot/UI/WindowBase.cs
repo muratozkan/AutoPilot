@@ -117,12 +117,12 @@ namespace AutoPilot.UI
 					textColor = Color.white
 				},
 				margin = new RectOffset (),
-				padding = new RectOffset (5, 0, 0, 0),
+				padding = new RectOffset (10, 10, 0, 0),
 				alignment = TextAnchor.MiddleLeft,
 				fontSize = (int)(11),
 				fontStyle = FontStyle.Bold,
-				fixedHeight = 20.0f
-
+				fixedHeight = 25.0f,
+				stretchWidth = true
 			};
 
 			stylesLoaded = true;
@@ -162,8 +162,9 @@ namespace AutoPilot.UI
 			string result = GUILayout.TextField(defValue, textFieldStyle);
 
 			GUILayout.EndHorizontal();
-
-			onUpdate (result);
+			if (result != defValue) {
+				onUpdate (result);
+			}
 		}
 
 		#endregion
