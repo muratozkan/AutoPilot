@@ -50,8 +50,9 @@
     <Compile Include="UI\WindowBase.cs" />
     <Compile Include="UI\APStatusWindow.cs" />
     <Compile Include="APData.cs" />
-    <Compile Include="Control\APAltitudeControl.cs" />
     <Compile Include="Control\APPid.cs" />
+    <Compile Include="Control\APPitchControl.cs" />
+    <Compile Include="Control\APAltitudeControl.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

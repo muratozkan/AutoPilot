@@ -8,7 +8,7 @@ namespace AutoPilot
 	[KSPAddon(KSPAddon.Startup.Flight, false)]
 	public class AutoPilotMod : MonoBehaviour
 	{
-		private APControl flightControl = new APAltitudeControl ();
+		private APControl flightControl = new APPitchControl ();
 
 		/*
          * Called after the scene is loaded. Load resources here.
@@ -73,12 +73,14 @@ namespace AutoPilot
 		private void OnFlyByWire(FlightCtrlState state) 
 		{
 			Vessel vessel = FlightGlobals.ActiveVessel;
+			// Disable SAS 
+			vessel.ActionGroups.SetGroup(KSPActionGroup.SAS, false);
 
 			APFlightData data = new APFlightData {
 				vHorizontal = (float) vessel.horizontalSrfSpeed,
 				vVertical = (float) vessel.verticalSpeed,
 				velocity = vessel.GetSrfVelocity (),
-				rotation = vessel.srfRelRotation,
+				rotation = vessel.transform.localEulerAngles,
 				altitude = (float) vessel.altitude
 			};
 
